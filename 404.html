@@ -1,0 +1,14 @@
+<!-- public/404.html (or at the root of your built project) -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Page Not Found</title>
+    <script>
+      // Get the current path and redirect to index.html with the path as a hash
+      const path = window.location.pathname.replace(/\/$/, '');
+      window.location.replace('/your-repo/#' + path); // Replace 'your-repo' with your repository name
+    </script>
+  </head>
+  <body></body>
+</html>

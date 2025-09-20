@@ -13,30 +13,7 @@
 
 <script>
 import axios from 'axios';
-// Place in separate data file 
-const catImages = [
-  require('../assets/Pic-0.png'),
-  require('../assets/Pic-1.png'),
-  require('../assets/Pic-2.png'),
-  require('../assets/Pic-3.png'),
-  require('../assets/Pic-4.png'),
-  require('../assets/Pic-5.png'),
-  require('../assets/Pic-6.png'),
-  require('../assets/Pic-7.png'),
-  require('../assets/Pic-8.png'),
-];
-
-// Place in separate data file 
-String.prototype.hashCode = function () {
-  let hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr = this.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr;
-    hash |= 0;
-  }
-  return hash;
-}
+import { catImages, hashId } from '@/data/data';
 
 export default {
   data() {
@@ -53,6 +30,8 @@ export default {
     if (found) this.imgSrc = catImages[Math.abs(id) % catImages.length];
   }
 }
+
+hashId();
 </script>
 
 <style scoped lang="scss">

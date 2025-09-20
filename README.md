@@ -1,4 +1,6 @@
-# cat-facts
+# [Vue cat facts](https://svitlanatsupryk-jul18.github.io/vue-cat-facts/)  <-- Click here
+
+Vue project with facts about cats that allows you to browse a list of facts and open a separate page for each fact, with ability filter by length and search by fact, and login page.
 
 ## Project setup
 ```
@@ -14,12 +16,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# vue-cat-facts

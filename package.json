@@ -1,5 +1,6 @@
 {
   "name": "cat-facts",
+  "homepage": "https://svitlanatsupryk-jul18.github.io/vue-cat-facts/",
   "version": "0.1.0",
   "private": true,
   "description": "A responsive Vue 2 app for browsing cat facts, with auth and theme switching.",
