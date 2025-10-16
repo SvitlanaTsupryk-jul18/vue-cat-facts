@@ -6,7 +6,7 @@
           <router-link to="/" class="white logo">
             <img alt="Cats logo" src="../assets/white-logo.svg">
           </router-link>
-          <a href="https://keiki.app/">Some Keiki links</a>
+          <a href="https://keiki.app/">Some links</a>
         </div>
         <div class="footer__bottom">
           <p>@cats.com inc. All rights reserved.</p>

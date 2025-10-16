@@ -7,10 +7,11 @@
         </router-link>
         <div class="header__right">
           <ThemeToggle :theme="theme" @toggle-theme="$emit('toggle-theme')" />
-          <div class="header__user" v-if="username">
-            <span @click="$emit('log-out')" class="header__avatar" tabindex="0" role="button">
+          <div  @click="$emit('log-out')" class="header__user" v-if="username">
+            <span class="header__avatar" tabindex="0" role="button">
               {{ username ? username[0].toUpperCase() : '' }}
             </span>
+            <span class="tooltiptext">Click on letter to logout</span>
           </div>
         </div>
       </div>
@@ -52,9 +53,6 @@ export default {
 
   &__user {
     cursor: pointer;
-  }
-
-  &__avatar {
     display: flex;
     width: 56px;
     height: 56px;
@@ -64,10 +62,37 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
-    font-size: 31px;
     flex-shrink: 0;
     margin-left: 10px;
+    padding-top: 5px;
+    position: relative;
+
+    .tooltiptext {
+      font-size: 14px;
+      visibility: hidden;
+      padding: 0.5em;
+      background: var(--header-bg);
+      color: #636af2;
+      text-align: center;
+      border-radius: 0.25em;
+      white-space: nowrap;
+      position: absolute;
+      z-index: 1;
+      top: calc(100% + 30px);
+      right: 0;
+      transition-property: visibility;
+      transition-delay: 0s;
+    }
+
+    &:hover .tooltiptext {
+      visibility: visible;
+      transition-delay: 0.3s;
+    }
+  }
+
+  &__avatar {
+    font-weight: 500;
+    font-size: 31px;
   }
 
   .logo {
@@ -92,6 +117,7 @@ export default {
 @media (max-width: 768px) {
   .header {
     height: 70px;
+
     &__placeholder {
       height: 70px;
     }
@@ -101,9 +127,12 @@ export default {
       width: 136px;
     }
 
-    &__avatar {
+    &__user {
       width: 40px;
       height: 40px;
+    }
+
+    &__avatar {
       font-size: 25px;
     }
   }

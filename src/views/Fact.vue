@@ -13,7 +13,8 @@
 
 <script>
 import axios from 'axios';
-import { catImages, hashId } from '@/data/data';
+import { catImages } from '@/data/data';
+import { hashId } from '@/data/utils';
 
 export default {
   data() {
@@ -25,13 +26,12 @@ export default {
   async created() {
     const res = await axios.get('https://catfact.ninja/facts?limit=100');
     const id = parseInt(this.$route.params.id);
-    const found = res.data.data.find(f => f.fact.hashCode() === id);
+    const found = res.data.data.find(f => hashId(f.fact) === id);
     this.fact = found;
     if (found) this.imgSrc = catImages[Math.abs(id) % catImages.length];
   }
 }
 
-hashId();
 </script>
 
 <style scoped lang="scss">

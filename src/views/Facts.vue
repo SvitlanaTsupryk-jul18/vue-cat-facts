@@ -3,14 +3,17 @@
     <h1>Facts About Cats To Share With Kids!</h1>
     <div class="facts__controls">
       <div class="search__container">
-        <input v-model="text" @input="updateFacts" placeholder="Search facts here" />
+        <input v-model="text" @input="debouncedUpdate" placeholder="Search facts here" />
       </div>
       <CustomSelect :options="sortOptions" :default-option='{ option: "all", text: "All facts" }' class="select"
         @input="setSort" />
     </div>
-    <div class="facts__list">
+    <div v-if="shownFacts.length > 0" class="facts__list">
       <FactCard v-for="fact in shownFacts" :key="fact.id" :fact="fact" :img-src="getCatImage(fact.id)"
         @click.native="goToFact(fact.id)" />
+    </div>
+    <div v-else>
+      <p>No items found. Please choose other criterias.</p>
     </div>
     <button v-if="canLoadMore" class="facts__more" @click="loadMore">Load More</button>
   </div>
@@ -20,7 +23,8 @@
 import CustomSelect from '@/components/CustomSelect.vue';
 import FactCard from '../components/FactCard.vue';
 import axios from 'axios';
-import { catImages, sortOptions, hashId } from '@/data/data';
+import { catImages, sortOptions } from '@/data/data';
+import { debounce, hashId } from '@/data/utils';
 
 export default {
   components: { FactCard, CustomSelect },
@@ -30,44 +34,53 @@ export default {
       shownCount: 10,
       sort: 'all',
       text: '',
+      debouncedText: '',
       loading: false,
       sortOptions
     }
   },
   computed: {
     filtered() {
-      let arr = this.allFacts;
-      if (this.sort === 'short-only') arr = arr.filter(f => f.fact.length < 100);
-      else if (this.sort === 'long-only') arr = arr.filter(f => f.fact.length >= 100);
-      if (this.text) arr = arr.filter(f => f.fact.toLowerCase().includes(this.text.toLowerCase()));
-      if (this.sort === 'longest') arr = arr.slice().sort((a, b) => b.fact.length - a.fact.length);
-      else if (this.sort === 'shortest') arr = arr.slice().sort((a, b) => a.fact.length - b.fact.length);
-      return arr;
+      let filteredFacts = this.allFacts;
+      if (this.sort === 'short-only') filteredFacts = filteredFacts.filter(f => f.fact.length < 100);
+      else if (this.sort === 'long-only') filteredFacts = filteredFacts.filter(f => f.fact.length >= 100);
+      if (this.debouncedText) filteredFacts = filteredFacts.filter(f => f.fact.toLowerCase().includes(this.debouncedText.toLowerCase()));
+      if (this.sort === 'longest') filteredFacts = filteredFacts.slice().sort((a, b) => b.fact.length - a.fact.length);
+      else if (this.sort === 'shortest') filteredFacts = filteredFacts.slice().sort((a, b) => a.fact.length - b.fact.length);
+      return filteredFacts;
     },
     shownFacts() { return this.filtered.slice(0, this.shownCount) },
     canLoadMore() { return this.filtered.length > this.shownCount }
+  },
+  created() {
+    this.debouncedUpdate = debounce(this.updateFacts, 500);
   },
   mounted() { this.fetchFacts() },
   methods: {
     async fetchFacts() {
       this.loading = true;
       const res = await axios.get('https://catfact.ninja/facts?limit=100');
-      this.allFacts = res.data.data.map(f => ({ ...f, id: f.fact.hashCode() }));
+      this.allFacts = res.data.data.map(f => ({ ...f, id: hashId(f.fact) }));
       this.loading = false;
     },
     loadMore() { this.shownCount += 10 },
     getCatImage(id) {
       return catImages[Math.abs(id) % catImages.length];
     },
-    updateFacts() { this.shownCount = 10 },
+    updateFacts(event) {
+      this.debouncedText = event.target.value;
+      this.shownCount = 10;
+    },
     goToFact(id) { this.$router.push(`/fact/${id}`) },
     setSort(option) {
       this.sort = option;
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timeout);
   }
 }
 
-hashId();
 </script>
 
 <style scoped lang="scss">
@@ -132,6 +145,7 @@ hashId();
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 40px 30px;
+    margin-bottom: 40px;
   }
 
   .facts__more {

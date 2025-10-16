@@ -19,6 +19,7 @@ export default {
 <style scoped lang="scss">
 .fact-card {
   height: 460px;
+  max-width: 421px;
   border-radius: 6px;
   transition: all .25s;
   cursor: pointer;

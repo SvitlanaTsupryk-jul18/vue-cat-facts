@@ -3,6 +3,7 @@
     <div class="login">
       <form @submit.prevent="onLogin" class="login__form">
         <h1>Log in</h1>
+        <h2>Please login to use Catfacts site</h2>
         <p>Name</p>
         <input v-model="username" :class="{ 'input--error': error }" placeholder="Enter your name" maxlength="15"
           autocomplete="off" @input="validate" />
@@ -64,6 +65,13 @@ export default {
       line-height: 34px;
       padding: 116px 20px 48px;
       text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 500;
+      font-size: 18px;
+      margin-bottom: 20px;
     }
 
     input {
